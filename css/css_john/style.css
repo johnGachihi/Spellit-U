@@ -1,0 +1,14 @@
+.entry-title {
+    font-family: 'luckiest_guyregular';
+    margin-bottom: 0 !important;
+}
+
+@font-face {
+    font-family: 'luckiest_guyregular';
+    src: url('../../fonts/luckiestguy-webfont.woff2') format('woff2'),
+         url('../../fonts/luckiestguy-webfont.woff') format('woff'),
+         url('../../fonts/luckiestguy.ttf');
+    font-weight: normal;
+    font-style: normal;
+
+}

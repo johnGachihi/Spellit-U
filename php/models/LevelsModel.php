@@ -47,10 +47,17 @@ class LevelsModel {
 
     public function getLevelContent($levelId = "") {
         $objectId = new MongoDB\BSON\ObjectId($levelId);
-        $cursor = $this->levelsCollection->find(["_id" => $objectId], [
-            "projection" => ["lessons" => 1, "checkpoint" => 1]
+        $levelContent = $this->levelsCollection->findOne(["_id" => $objectId], [
+            "projection" => ["lessons" => 1, "checkPoint" => 1],
+            "typeMap" => ["root" => "array", "document" => "array", "array" => "array"]
         ]);
-        return $cursor->toArray();
+        
+        // $levelContent = [];
+        // foreach($cursor as $doc) {
+        //     $levelContent[] = $doc["lessons"];
+        // }
+
+        return isset($levelContent) ? $levelContent : "Not found";
     }
 
 }

@@ -43,7 +43,47 @@ class LevelsModel_Test extends TestCase {
 
     public function test_getLevelContent() {
         $levelsModel = new LevelsModel();
-        $levelContent = $levelsModel->getLevelContent("5bcdc75e514fae742cd1462d");
+        $levelContent = $levelsModel->getLevelContent("5bd353af514fae320cf656e6");
+    
+        $expectedLessons = [
+            "lessons" => [
+                [
+                    "word" => [
+                        "text" => "benz",
+                        "wordSegments" => [
+                            "ben",
+                            "z"
+                        ],
+                        "imagePath" => "SIT5948202628029344863.jpg",
+                        "phoneticPath" => "SIT3329441938150707703.mp3"
+                    ]
+                ],
+                [
+                    "word" => [
+                        "text" => "bend",
+                        "wordSegments" => [
+                            "ben",
+                            "d"
+                        ],
+                        "imagePath" => "SIT6599061268566238515.jpg",
+                        "phoneticPath" => "SIT65134024025895118.mp3"
+                    ]
+                ]
+            ]
+        ];
+
+        $expectedCheckpoint = [
+            "checkPoint" => [
+                "wordImagePath" => "SIT1653829229108815134.jpeg",
+                "testWord" => "dice",
+                "incompleteTestWord" => "d_ce"
+            ]
+        ];
+
+        // print_r($expectedLessons + $expectedCheckpoint);
+
+        // print_r($levelContent[0]["lessons"]->jsonSerialize());
+
         print_r($levelContent);
     }
 
