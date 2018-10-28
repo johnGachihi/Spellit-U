@@ -7,7 +7,7 @@ class PhoneticsModel {
     public function __construct() {
         require 'MongoClient.php';
         $this->mongoClient = $mongoClient;
-        $this->phoneticsCollection = $mongoClient->test->phonetic;
+        $this->phoneticsCollection = $mongoClient->spellitdb->phonetic;
     }
 
     public function getPhonetics($texts = []) {

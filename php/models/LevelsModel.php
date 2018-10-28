@@ -8,7 +8,7 @@ class LevelsModel {
     public function __construct() {
         require 'MongoClient.php';
         $this->mongoClient = $mongoClient;
-        $this->levelsCollection = $mongoClient->test->level;
+        $this->levelsCollection = $mongoClient->spellitdb->level;
     }
 
     public function getAllLevels($fields = []) {
