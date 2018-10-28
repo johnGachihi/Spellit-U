@@ -1,103 +1,113 @@
 import React from 'react';
+import styled from 'styled-components';
+import SplitText from 'react-pose-text';
+import ReactHowler from 'react-howler';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faRedoAlt} from '@fortawesome/free-solid-svg-icons';
 
-let lessonItems = [];
+//Should be renamed
+const LessonAreaDiv = styled.div`
+    width: 90%;
+    height: 500px;
+    margin: auto;
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+`;
 
-class Level extends React.Component {
+const TextDiv = styled.div`
+    font-size: 10em;
+    text-align: center
+`;
+
+const textAnim = {
+    conceal: {
+        scale: 0
+    },
+    reveal: {
+        dragable: true,
+        scale: 1,
+        transition: {
+            duration: 500,
+            type: "spring"
+        }
+    }
+}
+
+const ReplayButton = styled.a`
+    text-align: center;
+    margin: 20px;
+`;
+
+class LessonArea extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isLoaded: false,
-            phoneticResources: {},
-            lessons: [],
-            lessonComponents: []
-        }
+            phoneticLoaded: false,
+            poseComplete: false,
+            audioComplete: false
+        };
+
+        this.handlePhoneticLoaded = this.handlePhoneticLoaded.bind(this);
+        this.handleAudioComplete = this.handleAudioComplete.bind(this);
+        this.handlePoseComplete = this.handlePoseComplete.bind(this);
+
+        this.howler = React.createRef();
     }
 
-    componentDidMount() {
-        fetch("http://localhost/spell-it2/php/controllers/levelscontroller.php?lessonContent=1&levelid=" + getLevelIdFromURL())
-            .then(response => response.json())
-            .then(
-                result => {
-                    console.log("Lesson content response", result);
+    handlePhoneticLoaded() {
+        this.setState({phoneticLoaded: true});
+    }
 
-                    this.state.lessons = getLessons(result["lessons"]);
-                    console.log("this.state.lessons", this.state.lessons);
-
-                    fetch("http://localhost/spell-it2/php/controllers/phoneticscontroller.php?getcontent=" + getJoinedTexts(result))
-                        .then(response => response.json())
-                        .then(
-                            result => {
-                                this.state.phoneticResources = result;
-                                console.log("PhoneticResources", this.state.phoneticResources);
-
-                                for(let lesson of this.state.lessons) {
-                                    let requiredPhoneticResources = {};
-                                    for(let text of lesson["texts"]){
-                                        requiredPhoneticResources[text] = this.state.phoneticResources[text];
-                                    }
-                                    console.log(lesson["text"], requiredPhoneticResources);
-                                    this.state.lessonComponents.push(
-                                        <Level
-                                            text={lesson["text"]}
-                                            phonetics={lesson["phonetics"]}
-                                            texts={lesson["texts"]}
-                                            phoneticResources={requiredPhoneticResources}
-                                        />
-                                    )
-                                }
-                            },
-                            error => {
-                                console.log("Phonetics response", error);
-                            }
-                        )
-                },
-                error => {
-                    console.log(error);
-                }
-            )
+    handlePoseComplete() {
+        if(this.state.audioComplete){
+            this.props.handleComplete();
+            console.log("Everything completed");
+        } else {
+            this.state.poseComplete = true;
+            console.log("Pose completed");
+        }
+    }
+    
+    handleAudioComplete() {
+        if(this.state.poseComplete){
+            this.props.handleComplete();
+            console.log("Everything completed");
+        } else {
+            this.state.audioComplete = true;
+            console.log("Pose completed");
+        }
     }
 
     render() {
-        return <div>a</div>
+        return (
+            <LessonAreaDiv>
+                <ReplayButton><FontAwesomeIcon icon={faRedoAlt} size="1x"/></ReplayButton>
+                <TextDiv>
+                    <ReactHowler
+                        src={"http://localhost/spellit-media/content/" + this.props.phonetics}
+                        onLoad={this.handlePhoneticLoaded}
+                        volume={1}
+                        ref={this.howler}
+                        onEnd={this.handleAudioComplete}
+                        playing={!this.props.stopped}
+                    />
+                    <SplitText
+                        initialPose="conceal"
+                        pose={this.state.phoneticLoaded ? "reveal" : "conceal"}
+                        charPoses={textAnim}
+                        onPoseComplete={this.handlePoseComplete}
+                    >
+                        {this.props.text}
+                    </SplitText>
+                </TextDiv>
+            </LessonAreaDiv>
+        )
     }
 }
 
-function getLevelIdFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get("levelid");
-}
-
-function getLessons(lessonsResponse) {
-    let lessons = [];
-    for(let lesson of lessonsResponse) {
-        let texts = lesson["word"]["text"].split('').concat(
-            lesson["word"]["wordSegments"]
-        );
-        const word = {
-            text: lesson["word"]["text"],
-            phonetics: lesson["word"]["phoneticPath"],
-            texts: texts
-        }
-        lessons.push(word);
-    }
-    return lessons;
-}
-
-function getJoinedTexts(levelContent) {
-    let allTexts = []
-    for(let word of levelContent["lessons"]) {
-        const texts = word["word"]["text"].split('');
-        const segments = word["word"]["wordSegments"];
-        allTexts = allTexts.concat(texts, segments);
-    }
-    console.log("Concatenated string", allTexts);
-
-    allTexts = Array.from(new Set(allTexts));
-    const jointTexts = allTexts.join("_");
-    console.log(jointTexts);
-
-    return jointTexts
-}
-
-export default Level;
+export default LessonArea;

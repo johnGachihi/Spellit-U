@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import LessonAreaTitle from './titlediv';
-import Level from './lesson-area';
+import Level from './level';
 
 const TitleDiv = styled.div`
     display: flex;
