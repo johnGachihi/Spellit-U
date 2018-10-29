@@ -24,3 +24,19 @@ export const CheckpointTitle = styled.div`
     margin-top: 10px;
     margin-bottom: 40px;
 `;
+
+export const IncompleteWordDiv = styled.div`
+    font-size: 5em;
+    margin-top: 50px;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-weight: 400;
+`;
+
+export const UnknownLetterTextInput = styled.input`
+    width: 77px;
+    height: 69px;
+    border-width: 0 0 2px;
+    border-color: #2d2d2d;
+    text-align: center;
+    color: #282828;
+`;

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {LessonAreaDiv} from './styles/checkpoint-styles';
 import {CheckpointImage, CheckpointTitle} from './styles/checkpoint-styles';
+import IncompleteWordText from './IncompleteWordText';
 
 class Checkpoint extends React.Component {
 
@@ -10,7 +11,10 @@ class Checkpoint extends React.Component {
             <LessonAreaDiv>
                 <CheckpointTitle>Fill word</CheckpointTitle>
                 <CheckpointImage src={"http://localhost/spellit-media/content/" + this.props.imageFileName}/>
-                <div>{this.props.incompleteWord}</div>
+                <IncompleteWordText
+                    completeWord={this.props.completeWord}
+                    incompleteWord={this.props.incompleteWord}
+                />
             </LessonAreaDiv>
         )
     }

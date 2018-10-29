@@ -87,14 +87,14 @@ class Level extends React.Component {
 
     renderLessons() {
         let lessons = [];
-        const {checkpoint} = this.state;
-        lessons.push(
-            <Checkpoint
-                imageFileName={checkpoint["wordImagePath"]}
-                incompleteWord={checkpoint["incompleteTestWord"]}
-                word={checkpoint["testWord"]}
-            />
-        );
+        // const {checkpoint} = this.state;
+        // lessons.push(
+        //     <Checkpoint
+        //         imageFileName={checkpoint["wordImagePath"]}
+        //         incompleteWord={checkpoint["incompleteTestWord"]}
+        //         completeWord={checkpoint["testWord"]}
+        //     />
+        // );
         this.state.lessons.map((lesson, index) => {
             lessons.push(
                 <Lesson
@@ -109,14 +109,14 @@ class Level extends React.Component {
                 />
             )
         })
-        // const {checkpoint} = this.state;
-        // lessons.push(
-        //     <Checkpoint
-        //         imageFileName={checkpoint["wordImagePath"]}
-        //         incompleteWord={checkpoint["incompleteTestWord"]}
-        //         word={checkpoint["testWord"]}
-        //     />
-        // )
+        const {checkpoint} = this.state;
+        lessons.push(
+            <Checkpoint
+                imageFileName={checkpoint["wordImagePath"]}
+                incompleteWord={checkpoint["incompleteTestWord"]}
+                completeWord={checkpoint["testWord"]}
+            />
+        )
         return lessons;
     }
 

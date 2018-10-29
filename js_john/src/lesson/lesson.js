@@ -67,6 +67,7 @@ class Lesson extends React.Component {
             )
         }
         else if(currentStage === numberOfStages){
+            console.log("At whole word stage:", this.props.phonetics);
             return (
                 <div>
                     {/* <div>{"Index: " + this.props.index}</div>
