@@ -14,6 +14,8 @@ class Lesson extends React.Component {
         }
 
         this.handleStageComplete = this.handleStageComplete.bind(this);
+        this.handleRedo = this.handleRedo.bind(this);
+        this.handleNextClick = this.handleNextClick.bind(this);
     }
 
     handleStageComplete() {
@@ -33,6 +35,15 @@ class Lesson extends React.Component {
         this.setState({currentStage: this.state.currentStage+1});
     }
 
+    handleRedo() {
+        console.log("Redo clicked");
+        this.setState({currentStage: 0});
+    }
+
+    handleNextClick() {
+        this.props.onClickNext();
+    }
+
     render() {
         // console.log("Current lesson" , this.props.index, this.props.currentLesson === this.props.index,);
         console.log("currentText", this.state.currentText);
@@ -40,8 +51,8 @@ class Lesson extends React.Component {
         if(currentStage < numberOfStages){
             return (
                 <div>
-                    <div>{"Index: " + this.props.index}</div>
-                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div>
+                    {/* <div>{"Index: " + this.props.index}</div>
+                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div> */}
                     {this.props.currentLesson == this.props.index &&
                         <LessonArea
                             text={this.props.texts[currentStage]}
@@ -49,6 +60,7 @@ class Lesson extends React.Component {
                             lesson={this.props.index}
                             handleComplete={this.handleStageComplete}
                             stopped={false}
+                            onRedo={this.handleRedo}
                         />
                     }
                 </div>
@@ -57,8 +69,8 @@ class Lesson extends React.Component {
         else if(currentStage === numberOfStages){
             return (
                 <div>
-                    <div>{"Index: " + this.props.index}</div>
-                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div>
+                    {/* <div>{"Index: " + this.props.index}</div>
+                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div> */}
                     {this.props.currentLesson == this.props.index &&
                         <LessonArea
                             text={this.props.text}
@@ -66,6 +78,7 @@ class Lesson extends React.Component {
                             lesson={this.props.index}
                             handleComplete={this.handleStageComplete}
                             stopped={false}
+                            onRedo={this.handleRedo}
                         />
                     }
                 </div>
@@ -74,8 +87,8 @@ class Lesson extends React.Component {
         else {
             return (
                 <div>
-                    <div>{"Index: " + this.props.index}</div>
-                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div>
+                    {/* <div>{"Index: " + this.props.index}</div>
+                    <div>{this.props.currentLesson === this.props.index ? "This is current lesson" : ""}</div> */}
                     {this.props.currentLesson == this.props.index &&
                         <LessonArea
                             text={this.props.text}
@@ -83,6 +96,8 @@ class Lesson extends React.Component {
                             lesson={this.props.index}
                             handleComplete={this.handleStageComplete}
                             stopped={true}
+                            onRedo={this.handleRedo}
+                            onNextClicked={this.handleNextClick}
                         />
                     }
                 </div>

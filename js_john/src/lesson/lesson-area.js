@@ -4,9 +4,11 @@ import SplitText from 'react-pose-text';
 import ReactHowler from 'react-howler';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faRedoAlt} from '@fortawesome/free-solid-svg-icons';
+import {faArrowCircleRight} from '@fortawesome/free-solid-svg-icons'
+import posed from 'react-pose';
 
 //Should be renamed
-const LessonAreaDiv = styled.div`
+export const LessonAreaDiv = styled.div`
     width: 90%;
     height: 500px;
     margin: auto;
@@ -37,9 +39,38 @@ const textAnim = {
     }
 }
 
-const ReplayButton = styled.a`
+const Replay = posed.a({
+    hoverable: true,
+    draggable: true,
+    pressable: true,
+    init: {
+        scale: 1
+    },
+    hover: {
+        scale: 2,
+        transition: {type: "spring"}
+    },
+    press: {
+        scale: 1.5
+    }
+})
+
+const ReplayButton = styled(Replay)`
     text-align: center;
     margin: 20px;
+`;
+
+const Next = posed.a({
+    pressable: true,
+    init: {scale: 1},
+    press: {
+        scale: 1.5,
+        transition: {type: "spring"}
+    }
+})
+
+const NextButton = styled(Next)`
+    text-align: center;
 `;
 
 class LessonArea extends React.Component {
@@ -55,6 +86,7 @@ class LessonArea extends React.Component {
         this.handlePhoneticLoaded = this.handlePhoneticLoaded.bind(this);
         this.handleAudioComplete = this.handleAudioComplete.bind(this);
         this.handlePoseComplete = this.handlePoseComplete.bind(this);
+        this.handleNextClick = this.handleNextClick.bind(this)
 
         this.howler = React.createRef();
     }
@@ -83,10 +115,16 @@ class LessonArea extends React.Component {
         }
     }
 
+    handleNextClick() {
+        this.props.onNextClicked();
+    }
+
     render() {
         return (
             <LessonAreaDiv>
-                <ReplayButton><FontAwesomeIcon icon={faRedoAlt} size="1x"/></ReplayButton>
+                <ReplayButton onClick={this.props.onRedo}>
+                    <FontAwesomeIcon icon={faRedoAlt} size="1x"/>
+                </ReplayButton>
                 <TextDiv>
                     <ReactHowler
                         src={"http://localhost/spellit-media/content/" + this.props.phonetics}
@@ -105,6 +143,11 @@ class LessonArea extends React.Component {
                         {this.props.text}
                     </SplitText>
                 </TextDiv>
+                {this.props.stopped &&
+                    <NextButton onClick={this.handleNextClick}>
+                        <FontAwesomeIcon icon={faArrowCircleRight} size="3x"></FontAwesomeIcon>
+                    </NextButton>
+                }
             </LessonAreaDiv>
         )
     }

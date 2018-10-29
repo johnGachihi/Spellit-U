@@ -2,6 +2,7 @@ import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css";
 import Lesson from './lesson';
+import Checkpoint from './checkpoint';
 
 let lessonItems = [];
 
@@ -13,12 +14,16 @@ class Level extends React.Component {
             isLoaded: false,
             phoneticResources: {},
             lessons: [],
+            checkpoint: {},
             lessonComponents: [],
             currentLesson: 0
         }
 
+        this.carousel = React.createRef();
+
         this.handleSlideChanged = this.handleSlideChanged.bind(this);
         this.renderLessons = this.renderLessons.bind(this);
+        this.handleNextClicked = this.handleNextClicked.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +35,9 @@ class Level extends React.Component {
 
                     this.state.lessons = getLessons(result["lessons"]);
                     console.log("this.state.lessons", this.state.lessons);
+
+                    this.state.checkpoint = result["checkPoint"];
+                    console.log("this.state.checkpoint:", this.state.checkpoint);
 
                     fetch("http://localhost/spell-it2/php/controllers/phoneticscontroller.php?getcontent=" + getJoinedTexts(result))
                         .then(response => response.json())
@@ -79,6 +87,14 @@ class Level extends React.Component {
 
     renderLessons() {
         let lessons = [];
+        const {checkpoint} = this.state;
+        lessons.push(
+            <Checkpoint
+                imageFileName={checkpoint["wordImagePath"]}
+                incompleteWord={checkpoint["incompleteTestWord"]}
+                word={checkpoint["testWord"]}
+            />
+        );
         this.state.lessons.map((lesson, index) => {
             lessons.push(
                 <Lesson
@@ -89,9 +105,18 @@ class Level extends React.Component {
                     texts={lesson["texts"]}
                     phoneticResources={lesson["requiredPhoneticResources"]}
                     currentLesson={this.state.currentLesson}
+                    onClickNext={this.handleNextClicked}
                 />
             )
         })
+        // const {checkpoint} = this.state;
+        // lessons.push(
+        //     <Checkpoint
+        //         imageFileName={checkpoint["wordImagePath"]}
+        //         incompleteWord={checkpoint["incompleteTestWord"]}
+        //         word={checkpoint["testWord"]}
+        //     />
+        // )
         return lessons;
     }
 
@@ -99,6 +124,12 @@ class Level extends React.Component {
         this.setState({currentLesson: e.item});
         console.log("currentIndex", e.item);
         console.log("this.state.currentLesson", this.state.currentLesson);
+    }
+
+    handleNextClicked() {
+        // this.carousel._slideNext();
+        let {currentLesson} = this.state;
+        this.setState({currentLesson: currentLesson + 1})
     }
 
     render() {
@@ -125,6 +156,7 @@ class Level extends React.Component {
                         infinite={false}
                         keysControlDisabled={true}
                         onSlideChanged={this.handleSlideChanged}
+                        ref={this.carousel}
                     />
                 </div>
             )
