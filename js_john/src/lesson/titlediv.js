@@ -47,7 +47,7 @@ class LessonAreaTitle extends React.Component {
                     src="audio/theme-sunny.mp3"
                     loop={true}
                     preload={true}
-                    volume={0.05}
+                    volume={0.1}
                     playing={this.state.backgroundMusicPlaying}
                 />
             </div>
