@@ -35,7 +35,7 @@ class LevelsModel_Test extends TestCase {
     public function test_getAllLevelIDsByLevelNumberAsArray() {
         $levelsModel = new LevelsModel();
 
-        print_r($levelsModel->getAllLevels(["levelNo"])->toArray());
+        // print_r($levelsModel->getAllLevels(["levelNo"])->toArray());
         $levelsModel->getAllLevelIDsByLevelNumberAsArray();
         // foreach($levelsModel->getAllLevels(["lessons"]) as $doc)
         //     print_r($doc["levelNo"]);
@@ -84,7 +84,14 @@ class LevelsModel_Test extends TestCase {
 
         // print_r($levelContent[0]["lessons"]->jsonSerialize());
 
-        print_r($levelContent);
+        // print_r($levelContent);
+    }
+
+    public function test_getNextId() {
+        $levelsModel = new LevelsModel();
+
+
+        print_r($levelsModel->getNextId("5bd59a9e514fae03148535b1")["_id"]->__toString());
     }
 
 }

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import posed from 'react-pose';
 
 export const LessonAreaDiv = styled.div`
     width: 90%;
@@ -39,4 +40,28 @@ export const UnknownLetterTextInput = styled.input`
     border-color: #2d2d2d;
     text-align: center;
     color: #282828;
+`;
+
+const NextLevelButtonPose = posed.a({
+    pressable: true,
+    concealed: {
+        scale: 0
+    },
+    revealed: {
+        scale: 1,
+        transition: {type: "spring"}
+    },
+    press: {
+        scale: 1.2,
+        transition: {type: "spring"}
+    }
+});
+
+export const NextLevelButton = styled(NextLevelButtonPose)`
+    align-self: flex-end;
+    padding: 10px;
+    color: white;
+    background-color: #f16a54;
+    font-weight: 900
+    border-radius: 5px
 `;

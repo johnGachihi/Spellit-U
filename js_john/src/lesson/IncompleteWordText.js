@@ -2,6 +2,8 @@ import React from 'react';
 import UnknownLetterInput from './unknown-letter';
 import Letter from './checkpoint-letter';
 import {IncompleteWordDiv} from './styles/checkpoint-styles';
+import Confetti from 'react-dom-confetti';
+import ReactHowler from 'react-howler';
 
 class IncompleteWordText extends React.Component {
     constructor(props){
@@ -9,7 +11,8 @@ class IncompleteWordText extends React.Component {
 
         this.state = {
             numOfMissingLetters: 0,
-            numOfCorrectInputs: 0
+            numOfCorrectInputs: 0,
+            correctlyAnswered: false
         }
 
         this.renderChildren = this.renderChildren.bind(this);
@@ -22,6 +25,8 @@ class IncompleteWordText extends React.Component {
         if(numOfCorrectInputs === numOfMissingLetters) {
             //celebrate
             console.log("celebrate");
+            this.setState({correctlyAnswered: true});
+            this.props.onCorrectlyAnswered();
         }
         else {
             console.log("numOfMissingLetters", numOfMissingLetters);
@@ -60,8 +65,23 @@ class IncompleteWordText extends React.Component {
     }
 
     render() {
+        const config = {
+            angle: 77,
+            spread: 77,
+            decay: 0.9,
+            startVelocity: 47,
+            elementCount: 110
+        }
         return (
             <IncompleteWordDiv>
+                <Confetti active={this.state.correctlyAnswered} config={config}/>
+                <ReactHowler
+                    src={[
+                        "audio/correct-answer-bell-and-applause.mp3",
+                        "audio/correct-answer-bell-and-applause.wav"
+                    ]}
+                    playing={this.state.correctlyAnswered}
+                />
                 {this.renderChildren()}
             </IncompleteWordDiv>
         );

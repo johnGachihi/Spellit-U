@@ -60,6 +60,20 @@ class LevelsModel {
         return isset($levelContent) ? $levelContent : "Not found";
     }
 
+    public function getNextId($curId) {
+        $objectId = new MongoDB\BSON\ObjectId($curId);
+
+        $nextLevel = $this->levelsCollection->findOne(
+            ["_id" => ['$gt' => $objectId]],
+            [
+                "projection" => ["_id"],
+                "typeMap" => ["root" => "array", "document" => "array", "array" => "array"]
+            ]
+        );
+        
+        return $nextLevel;
+    }
+
 }
 
 ?>
