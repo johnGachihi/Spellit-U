@@ -164,7 +164,7 @@ class Level extends React.Component {
     }
 }
 
-function getLevelIdFromURL() {
+export function getLevelIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get("levelid");
 }
